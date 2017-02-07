@@ -10,11 +10,11 @@ import os
 
 def main():
 	number_of_page = 1
-	max_page = 16
-	file_name = open("csv/lips/makeup_lips_nyx.csv", "w")
+	max_page = 5
+	file_name = open("csv/lips/makeup_lips_NARS.csv", "w")
 
 	while number_of_page <= max_page:
-		url = "http://www.fishpond.co.nz/c/Beauty/Makeup/Lips/p/NYX?page="+str(number_of_page)
+		url = "http://www.fishpond.co.nz/Beauty/Makeup/Lips/?brand=NARS&cName=Beauty%2FMakeup%2FLips&page="+str(number_of_page)
 		page = requests.get(url)
 		soup = BeautifulSoup(page.text, "html.parser")
 		links = soup.findAll(attrs={"class":"blue_link fn url"}) 
@@ -24,7 +24,7 @@ def main():
 			page_product = requests.get(url_product)
 			soup = BeautifulSoup(page_product.text, "html.parser")
 			img = soup.find("img",attrs={"class":"photo"}).get("src")
-			brand = "NYX"
+			brand = "NARS"
 			# brand = soup.find(id="product_author").contents[1].get_text().replace("'"," ").replace("\""," ").replace("," ," ")
 			barcode_available = soup.find(attrs={"class":"product_info_text","width":"100%"}).contents[0].contents[2]
 			barcode = barcode_available.get("itemprop") == "gtin13" 
@@ -47,4 +47,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-	
