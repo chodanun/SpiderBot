@@ -59,9 +59,9 @@ def main():
 
 				try: # comment com
 					if k.contents[3].get('class')[0] == "right_text_con" : # comment
-						comment_com = k.contents[3].get_text().encode('utf-8').strip().replace("'"," ").replace("\""," ").replace(","," ").replace("\n"," ")
+						comment_com = k.contents[3].get_text().encode('utf-8').strip().replace("'"," ").replace("\""," ").replace(","," ").replace("\n"," ").replace('\r', '')
 					elif k.contents[1].get('class')[0] == "right_text_con" :
-						comment_com = k.contents[1].get_text().encode('utf-8').strip().replace("'"," ").replace("\""," ").replace(","," ").replace("\n"," ")
+						comment_com = k.contents[1].get_text().encode('utf-8').strip().replace("'"," ").replace("\""," ").replace(","," ").replace("\n"," ").replace('\r', '')
 					else :
 						comment_com = ""
 				except Exception as e:
