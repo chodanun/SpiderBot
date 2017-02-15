@@ -47,9 +47,29 @@ def main():
 					rate = 0
 			except Exception as e:
 				rate = "-1"
-			
-			print("%s : %s"%(name,rate))
+			# print("%s : %s"%(name,rate))
 		
+
+		comments = soup.findAll(attrs={"class":"comm_right_con"})
+		for k in comments :
+			try:
+				k.find(attrs={"class":"right_text_con"})
+				if k.contents[1].get('class')[0] == "right_text_tit" : # title
+					comment_title = k.contents[1].get_text().strip()
+				else :
+					comment_title = k.contents
+			except Exception as e:
+				comment_title = "null"
+
+			try:
+				if k.contents[3].get('class')[0] == "right_text_con" : # comment
+					comment_com = k.contents[3].get_text().strip()
+				else :
+					comment_com = k.contents
+			except Exception as e:
+				comment_com = "null"
+			
+			print ("%s : %s => %s"%(name,comment_title,comment_com)) 
 		# print("%s : %s : %s : %s"%(name,brand,description,type_items))
 		# comments = soup.find(attrs={"id":"commentlist"}).contents
 		# for j in comments :
