@@ -5,8 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 
 def main():
-	# file_name = open("csv/lip/nyx.csv", "w")
-
+	file_items = open("csv/lip/nyx.csv", "w")
+	file_comment = open("csv/lip/nyx-comment.csv", "w")
 	url = "http://nyx.konvy.com/search?brandDetailId=62&pid=114&cateId=1100"
 	page = requests.get(url)
 	soup = BeautifulSoup(page.text, "html.parser")
@@ -14,15 +14,16 @@ def main():
 	comment_id = 1
 	item_id = 1
 	for i in links :
-		name = i.contents[1].get("title").strip()
+		name = i.contents[1].get("title").strip().replace("'"," ").replace('"',' ').replace(","," ")
 		brand = "NYX"
 		type_items = "lipstick"
 		url = i.get("href")
 		page = requests.get(url)
 		soup = BeautifulSoup(page.text, "html.parser")
 		description = soup.find(attrs={"class":"pro_name"}).get_text().strip()
-		description = description[len(name):].strip()
+		description = description[len(name):].strip().replace("'"," ").replace('"',' ').replace(","," ").replace("\n"," ")
 
+		file_items.write("%s,%s,%s,%s,%s\n"%(item_id,name,brand,description,type_items))
 		while True : # comment table (more than 1 page)
 			ages = soup.findAll(attrs={"class":"right_text_skin"})
 			for age in ages:
@@ -53,7 +54,7 @@ def main():
 			for k in comments :
 				try:
 					if k.contents[1].get('class')[0] == "right_text_tit" :
-						comment_title = k.contents[1].get_text().strip()
+						comment_title = k.contents[1].get_text().strip().replace("'"," ").replace('"',' ').replace(","," ").replace("\n"," ")
 					else :
 						comment_title = ""	
 				except Exception as e:
@@ -61,13 +62,15 @@ def main():
 
 				try:
 					if k.contents[3].get('class')[0] == "right_text_con" : # comment
-						comment_com = k.contents[3].get_text().strip()
+						comment_com = k.contents[3].get_text().strip().replace("'"," ").replace('"',' ').replace(","," ").replace("\n"," ")
 					elif k.contents[1].get('class')[0] == "right_text_con" :
-						comment_com = k.contents[1].get_text().strip()
+						comment_com = k.contents[1].get_text().strip().replace("'"," ").replace('"',' ').replace(","," ").replace("\n"," ")
 				except Exception as e:
 					comment_com = ""
 				
-				print ("%s : %s : %d . %s => %s"%(item_id,name,comment_id,comment_title,comment_com)) 
+				file_comment.write("%d,%d,%s,%s,%s,%s\n"%(comment_id,item_id,comment_title,comment_com,age,rate))
+				print ("%d : %d"%(item_id,comment_id))
+
 				comment_id += 1 # increase comment id
 
 			next_page = soup.find(attrs={"class":"paginator"})	
@@ -84,7 +87,8 @@ def main():
 		item_id += 1
 		# break
 	
-	# file_name.close()
+	file_items.close()
+	file_comment.close()
 
 
 if __name__ == "__main__":
