@@ -7,25 +7,26 @@ from bs4 import BeautifulSoup
 def main():
 	file_items = open("csv/lip/nyx.csv", "w")
 	file_comment = open("csv/lip/nyx-comment.csv", "w")
-
+	brand = "NYX"
+	type_items = "lipstick"
+	comment_id = 1
+	item_id = 1
 	url = "http://nyx.konvy.com/search?brandDetailId=62&pid=114&cateId=1100"
+	
 	page = requests.get(url)
 	soup = BeautifulSoup(page.text, "html.parser")
 	links = soup.findAll(attrs={"class":"all_img"}) 
-	comment_id = 1
-	item_id = 1
 	for i in links :
 		name = i.contents[1].get("title").encode('utf-8').strip().replace("'"," ").replace('"',' ').replace(","," ")
-		brand = "NYX"
-		type_items = "lipstick"
 		url = i.get("href")
 		page = requests.get(url)
 		soup = BeautifulSoup(page.text, "html.parser")
 		description = soup.find(attrs={"class":"pro_name"}).get_text().strip()
 		description = description[len(name):].encode('utf-8').strip().replace("'"," ").replace('"',' ').replace(","," ").replace("\n"," ")
+		img = i.contents[1].get('src').encode('utf-8')
 
-		file_items.write("%d,%s,%s,%s,%s\n"%(item_id,name,brand,description,type_items))
-		# print ("%s,%s,%s,%s,%s\n"%(item_id,name,brand,description,type_items))
+		file_items.write("%d,%s,%s,%s,%s,%s\n"%(item_id,name,brand,description,img,type_items))
+		print ("%s,%s,%s,%s,%s\n"%(item_id,name,brand,description,type_items))
 		while True : # comment table (more than 1 page)
 			comments = soup.findAll(attrs={"class":"comm_right_con"})
 			for k in comments :

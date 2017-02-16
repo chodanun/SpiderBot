@@ -24,8 +24,8 @@ def main():
 		soup = BeautifulSoup(page.text, "html.parser")
 		description = soup.find(attrs={"class":"pro_name"}).get_text().strip()
 		description = description[len(i.contents[1].get("title").encode('utf-8').strip()):].encode('utf-8').strip().replace("'"," ").replace('"',' ').replace(","," ").replace("\n"," ")
-
-		file_items.write("%d,%s,%s,%s,%s\n"%(item_id,name,brand,description,type_items))
+		img = i.contents[1].get('src').encode('utf-8')
+		file_items.write("%d,%s,%s,%s,%s,%s\n"%(item_id,name,brand,description,img,type_items))
 		# print ("%s,%s,%s,%s,%s\n"%(item_id,name,brand,description,type_items))
 		while True : # comment table (more than 1 page)
 			comments = soup.findAll(attrs={"class":"comm_right_con"})
