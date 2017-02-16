@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 def main():
 	file_items = open("csv/powder/loreal.csv", "w")
 	file_comment = open("csv/powder/loreal-comment.csv", "w")
-	item_id = 303
+	item_id = 305
 	comment_id = 2652
 	brand = "L'Oreal"
 	type_items = "powder"
