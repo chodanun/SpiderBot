@@ -23,8 +23,8 @@ def sim(csvfile_barcode,csvfile_konvey):
 			name_barcode = row_barcode[1]
 			point = token_sort_ratio(name_konvey,name_barcode)
 			if point > point_max :
-				
-				print ("name_konvey : %s \nname_barcode : %s \npoint : %d\n\n"%(name_konvey,name_barcode,point))
+				barcode = row_barcode[3]
+				print ("name_konvey : %s \nname_barcode : %s \npoint : %d --> barcode : %s\n\n"%(name_konvey,name_barcode,point,barcode))
 				point_max = max(point,point_max)
 		break
 
