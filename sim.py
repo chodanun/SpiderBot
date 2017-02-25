@@ -12,7 +12,7 @@ def editdistance(name1, name2):
 def token_sort_ratio(name1, name2):
 	return fuzz.token_sort_ratio(name1, name2)
 
-def matching(csvfile_barcode,csvfile_items):
+def matching(csvfile_barcode,csvfile_items,thresold = 50):
 	
 	spamreader_barcode = csv.reader(csvfile_barcode, delimiter=',') # quotechar='|'
 	spamreader_items = csv.reader(csvfile_items, delimiter=',')
@@ -20,7 +20,6 @@ def matching(csvfile_barcode,csvfile_items):
 	#items : 0:item_id,1:name,2:brand,3:description_thai,4:img,5:type
 	i = 0 
 	overall = 0
-	thresold = 50
 	for row_barcode in spamreader_barcode:
 		barcode = row_barcode[3]
 		type_barcode = row_barcode[6]
@@ -36,13 +35,12 @@ def matching(csvfile_barcode,csvfile_items):
 				name_items = row_items[1]
 				if type_items == type_barcode and brand_items == brand_barcode:
 					point = token_sort_ratio(name_items,name_barcode)
-					if point >= point_max :
-						barcode = row_barcode[3]
+					if point >= point_max:
+						name_items_max = name_items
 						point_max = max(point,point_max)
-						if point > thresold :
-							i+=1
-							print (brand_barcode,brand_items)
-							print ("name_barcode : %s \nname_items : %s \npoint : %d --> barcode : %s\n\n"%(name_barcode,name_items,point,barcode))
+			if point_max >= thresold :
+				i+=1
+				print ("name_barcode : %s \nname_items : %s \npoint : %d --> barcode : %s\n\n"%(name_barcode,name_items_max,point_max,barcode))
 		# break
 	print ("Thresold : %s %% : %d\nOverall : %d"%(thresold,i,overall))
 
@@ -51,7 +49,7 @@ def main():
 	csvfile_barcode = readFile('../barcode.csv')
 	csvfile_items = readFile('../items.csv')
 
-	matching(csvfile_barcode,csvfile_items)
+	matching(csvfile_barcode,csvfile_items,70)
 
 if __name__ == '__main__' :
 	main()
