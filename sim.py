@@ -12,7 +12,7 @@ def editdistance(name1, name2):
 def token_sort_ratio(name1, name2):
 	return fuzz.token_sort_ratio(name1, name2)
 
-def matching(csvfile_barcode,csvfile_items,thresold = 50):
+def matching(csvfile_barcode,csvfile_items,thresold = 0):
 	
 	spamreader_barcode = csv.reader(csvfile_barcode, delimiter=',') # quotechar='|'
 	spamreader_items = csv.reader(csvfile_items, delimiter=',')
